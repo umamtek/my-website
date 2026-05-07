@@ -144,6 +144,20 @@ footer p{
 margin-bottom:10px;
 }
 
+.floating-whatsapp{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:#fff;
+padding:15px 22px;
+border-radius:50px;
+text-decoration:none;
+font-weight:600;
+z-index:999;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
 @media(max-width:900px){
 
 .navbar{
@@ -208,6 +222,13 @@ padding:25px;
 
 footer{
 padding:50px 20px;
+}
+
+.floating-whatsapp{
+bottom:15px;
+right:15px;
+padding:13px 18px;
+font-size:14px;
 }
 
 }
