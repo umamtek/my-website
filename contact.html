@@ -40,11 +40,18 @@
 
 <div class="card" style="margin-top:40px;">
 <h3>Send Enquiry</h3>
-<form>
-<input type="text" placeholder="Your Name">
-<input type="tel" placeholder="Phone Number">
-<textarea placeholder="Write your enquiry"></textarea>
-<button type="submit">Send Enquiry</button>
+<form onsubmit="sendContactForm(event)">
+
+<input type="text" id="contactName" placeholder="Your Name">
+
+<input type="tel" id="contactPhone" placeholder="Phone Number">
+
+<textarea id="contactMessage" placeholder="Write your enquiry"></textarea>
+
+<button type="submit">
+Send Enquiry
+</button>
+
 </form>
 </div>
 
