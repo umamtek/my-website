@@ -100,8 +100,7 @@ font-weight:700;
 
 .hero{
 min-height:100vh;
-background:
-linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
+background:linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.75)),
 url('https://images.unsplash.com/photo-1621905252507-b35492cc74b4?q=80&w=1600&auto=format&fit=crop');
 background-size:cover;
 background-position:center;
@@ -247,7 +246,100 @@ font-weight:600;
 z-index:999;
 }
 
-/* DARK MODE */
+.quote-popup-btn{
+position:fixed;
+bottom:85px;
+right:20px;
+background:#f5b301;
+color:#111;
+border:none;
+padding:15px 22px;
+border-radius:50px;
+font-weight:700;
+z-index:999;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.quote-popup{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.65);
+z-index:2000;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.quote-popup.active{
+display:flex;
+}
+
+.quote-box{
+background:#fff;
+color:#111;
+width:100%;
+max-width:420px;
+padding:35px;
+border-radius:20px;
+position:relative;
+box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+
+.quote-box h2{
+margin-bottom:20px;
+}
+
+.quote-box input,
+.quote-box select{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+.close-popup{
+position:absolute;
+right:20px;
+top:15px;
+font-size:28px;
+cursor:pointer;
+font-weight:700;
+}
+
+form{
+display:flex;
+flex-direction:column;
+gap:20px;
+margin-top:30px;
+}
+
+input,
+textarea{
+padding:16px;
+border:1px solid #ddd;
+border-radius:10px;
+font-size:16px;
+width:100%;
+outline:none;
+}
+
+textarea{
+min-height:140px;
+resize:vertical;
+}
+
+button{
+font-family:'Poppins',sans-serif;
+}
+
+iframe{
+width:100%;
+border-radius:20px;
+margin-top:20px;
+}
 
 body.dark-mode{
 background:#0f0f0f;
@@ -273,12 +365,15 @@ body.dark-mode .testimonials{
 background:#151515;
 }
 
+body.dark-mode .quote-box{
+background:#1b1b1b;
+color:#fff;
+}
+
 body.dark-mode .dark-btn{
 background:#f5b301;
 color:#111;
 }
-
-/* MOBILE */
 
 @media(max-width:900px){
 
@@ -351,6 +446,20 @@ grid-template-columns:1fr;
 .hero-stats div{
 width:100%;
 max-width:220px;
+}
+
+.quote-popup-btn{
+bottom:75px;
+right:15px;
+padding:13px 18px;
+font-size:14px;
+}
+
+.floating-whatsapp{
+bottom:15px;
+right:15px;
+padding:13px 18px;
+font-size:14px;
 }
 
 }
