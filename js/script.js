@@ -61,3 +61,32 @@ setTimeout(() => {
   }
 
 };
+
+function sendContactForm(event){
+
+event.preventDefault();
+
+const name =
+document.getElementById("contactName").value;
+
+const phone =
+document.getElementById("contactPhone").value;
+
+const message =
+document.getElementById("contactMessage").value;
+
+const whatsappMessage =
+`New Enquiry From Website
+
+Name: ${name}
+Phone: ${phone}
+
+Message:
+${message}`;
+
+const whatsappURL =
+`https://wa.me/919065760751?text=${encodeURIComponent(whatsappMessage)}`;
+
+window.open(whatsappURL, "_blank");
+
+}
