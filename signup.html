@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Signup | UMAMTEK</title>
 
 <link rel="stylesheet" href="./css/style.css?v=25">
-
 <link rel="icon" href="favicon.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,12 +25,10 @@
 <button class="menu-btn" onclick="toggleMenu()">☰</button>
 
 <ul class="nav-links" id="navLinks">
-
 <li><a href="index.html">Home</a></li>
 <li><a href="services.html">Services</a></li>
 <li><a href="contact.html">Contact</a></li>
 <li><a href="login.html">Login</a></li>
-
 </ul>
 
 <div class="nav-actions">
@@ -48,39 +47,39 @@ Create UMAMTEK Account
 
 <form>
 
-<input type="text" placeholder="Full Name">
+<input type="text" id="signupName" placeholder="Full Name">
 
-<input type="tel" placeholder="Mobile Number">
+<input type="tel" id="signupPhone" placeholder="Mobile Number">
 
-<input type="email" placeholder="Email Address">
+<input type="email" id="signupEmail" placeholder="Email Address">
 
-<select>
+<select id="signupRole">
 
-<option>Select Account Type</option>
+<option value="">Select Account Type</option>
 
-<option>Customer</option>
+<option value="customer">Customer</option>
 
-<option>Partner Worker</option>
+<option value="partner">Partner Worker</option>
 
-<option>Electrician</option>
+<option value="electrician">Electrician</option>
 
-<option>Plumber</option>
+<option value="plumber">Plumber</option>
 
-<option>Painter</option>
+<option value="painter">Painter</option>
 
-<option>Contractor</option>
+<option value="contractor">Contractor</option>
 
 </select>
 
-<input type="password" placeholder="Create Password">
+<div id="recaptcha-container"></div>
 
-<button type="button">
+<button type="button" onclick="sendSignupOTP()">
 Send OTP
 </button>
 
-<input type="text" placeholder="Enter OTP">
+<input type="text" id="signupOtp" placeholder="Enter OTP">
 
-<button type="button">
+<button type="button" onclick="verifySignupOTP()">
 Create Account
 </button>
 
@@ -91,10 +90,6 @@ Create Account
 <p style="text-align:center;">
 Already have an account?
 <a href="login.html">Login</a>
-</p>
-
-<p style="font-size:13px;text-align:center;margin-top:15px;">
-OTP signup system will be activated after Firebase integration.
 </p>
 
 </div>
@@ -114,6 +109,7 @@ OTP signup system will be activated after Firebase integration.
 </footer>
 
 <script src="js/script.js"></script>
+<script type="module" src="js/firebase.js"></script>
 
 </body>
 </html>
