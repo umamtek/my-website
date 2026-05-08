@@ -463,3 +463,70 @@ font-size:14px;
 }
 
 }
+
+.ai-banner{
+margin:40px 8%;
+padding:80px 8%;
+border-radius:30px;
+background:
+linear-gradient(135deg, rgba(0,0,0,0.88), rgba(0,0,0,0.72)),
+url('https://images.unsplash.com/photo-1621905251918-48416bd8575a?q=80&w=1600&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+color:#fff;
+position:relative;
+overflow:hidden;
+}
+
+.ai-banner::before{
+content:'';
+position:absolute;
+width:300px;
+height:300px;
+background:rgba(245,179,1,0.25);
+border-radius:50%;
+right:-80px;
+top:-80px;
+filter:blur(80px);
+}
+
+.ai-banner-content{
+max-width:750px;
+position:relative;
+z-index:2;
+}
+
+.ai-tag{
+display:inline-block;
+background:rgba(245,179,1,0.18);
+color:#f5b301;
+padding:10px 18px;
+border-radius:30px;
+font-size:14px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+.ai-banner h2{
+font-size:44px;
+line-height:1.2;
+margin-bottom:20px;
+}
+
+.ai-banner p{
+font-size:17px;
+line-height:1.8;
+margin-bottom:30px;
+}
+
+@media(max-width:900px){
+.ai-banner{
+margin:25px 20px;
+padding:55px 25px;
+border-radius:22px;
+}
+
+.ai-banner h2{
+font-size:30px;
+}
+}
