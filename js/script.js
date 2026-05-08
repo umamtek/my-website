@@ -1,3 +1,33 @@
+function updateLoginUI(){
+
+  const navActions = document.querySelector(".nav-actions");
+
+  if(!navActions){
+    return;
+  }
+
+  if(localStorage.getItem("umamtekLoggedIn") === "true"){
+
+    navActions.innerHTML = `
+      <button class="dark-btn" onclick="toggleDarkMode()">🌙</button>
+      <span class="login-user">Hi, User 👋</span>
+      <button class="logout-btn" onclick="logoutUser()">Logout</button>
+    `;
+
+  }
+
+}
+
+function logoutUser(){
+
+  localStorage.removeItem("umamtekLoggedIn");
+  localStorage.removeItem("umamtekUser");
+  localStorage.removeItem("umamtekPhone");
+  localStorage.removeItem("umamtekRole");
+
+  window.location.href = "login.html";
+
+}
 function toggleMenu(){
   const navLinks = document.getElementById("navLinks");
   navLinks.classList.toggle("active");
@@ -59,7 +89,7 @@ setTimeout(() => {
   if(localStorage.getItem("theme") === "dark"){
     document.body.classList.add("dark-mode");
   }
-
+  updateLoginUI();
 };
 
 function sendContactForm(event){
