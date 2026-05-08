@@ -90,3 +90,34 @@ const whatsappURL =
 window.open(whatsappURL, "_blank");
 
 }
+
+function sendCareerForm(event){
+
+event.preventDefault();
+
+const name =
+document.getElementById("careerName").value;
+
+const phone =
+document.getElementById("careerPhone").value;
+
+const skill =
+document.getElementById("careerSkill").value;
+
+const experience =
+document.getElementById("careerExperience").value;
+
+const whatsappMessage =
+`New Career Application
+
+Name: ${name}
+Phone: ${phone}
+Skill: ${skill}
+Experience: ${experience}`;
+
+const whatsappURL =
+`https://wa.me/919065760751?text=${encodeURIComponent(whatsappMessage)}`;
+
+window.open(whatsappURL, "_blank");
+
+}
