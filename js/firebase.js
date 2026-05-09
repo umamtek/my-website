@@ -178,3 +178,59 @@ window.submitBooking = async function(event){
   }
 
 };
+
+window.loadBookings = async function(){
+
+  const bookingContainer =
+  document.getElementById("bookingContainer");
+
+  if(!bookingContainer){
+    return;
+  }
+
+  bookingContainer.innerHTML =
+  "<p>Loading bookings...</p>";
+
+  try{
+
+    const querySnapshot =
+    await getDocs(collection(db, "bookings"));
+
+    bookingContainer.innerHTML = "";
+
+    querySnapshot.forEach((doc) => {
+
+      const data = doc.data();
+
+      bookingContainer.innerHTML += `
+
+      <div class="card">
+
+        <h3>${data.name}</h3>
+
+        <p><strong>Phone:</strong> ${data.phone}</p>
+
+        <p><strong>Service:</strong> ${data.service}</p>
+
+        <p><strong>Address:</strong> ${data.address}</p>
+
+        <p><strong>Date:</strong> ${data.date}</p>
+
+        <p><strong>Time:</strong> ${data.time}</p>
+
+        <p><strong>Details:</strong> ${data.details}</p>
+
+      </div>
+
+      `;
+
+    });
+
+  }catch(error){
+
+    bookingContainer.innerHTML =
+    `<p>${error.message}</p>`;
+
+  }
+
+};
