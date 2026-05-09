@@ -106,24 +106,33 @@ window.sendSignupOTPForPasswordAccount = async function(){
       return;
     }
 
-    if(window.recaptchaVerifier){
-      window.recaptchaVerifier.clear();
-      window.recaptchaVerifier = null;
+    const recaptchaBox =
+    document.getElementById("recaptcha-container");
+
+    if(!recaptchaBox){
+      alert("reCAPTCHA container missing");
+      return;
     }
 
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "normal"
-    });
+    recaptchaBox.innerHTML = "";
+
+    window.recaptchaVerifier =
+    new RecaptchaVerifier(
+      auth,
+      "recaptcha-container",
+      {
+        size: "normal"
+      }
+    );
 
     await window.recaptchaVerifier.render();
 
-    const confirmationResult = await signInWithPhoneNumber(
+    window.confirmationResult =
+    await signInWithPhoneNumber(
       auth,
       formatPhoneNumber(phone),
       window.recaptchaVerifier
     );
-
-    window.confirmationResult = confirmationResult;
 
     alert("OTP sent successfully");
 
