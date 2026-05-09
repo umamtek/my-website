@@ -292,6 +292,54 @@ Please help me reset my UMAMTEK account password.`;
 
 };
 
+/* LIVE CUSTOMER LOCATION */
+
+window.getCustomerLocation = function(){
+
+  const status =
+  document.getElementById("locationStatus");
+
+  if(!navigator.geolocation){
+
+    status.innerHTML =
+    "Geolocation not supported";
+
+    return;
+  }
+
+  status.innerHTML =
+  "Fetching live location...";
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(position){
+
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      document.getElementById("bookingLatitude").value = lat;
+
+      document.getElementById("bookingLongitude").value = lng;
+
+      document.getElementById("bookingMapLink").value =
+      `https://maps.google.com/?q=${lat},${lng}`;
+
+      status.innerHTML =
+      "✅ Live location added successfully";
+
+    },
+
+    function(error){
+
+      status.innerHTML =
+      "❌ Location permission denied";
+
+    }
+
+  );
+
+};
+
 /* BOOKING FORM */
 
 window.submitBooking = async function(event){
