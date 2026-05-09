@@ -69,59 +69,69 @@ function cleanPhoneForWhatsApp(phone){
   return clean;
 }
 
-function setupRecaptcha(){
-  if(!window.recaptchaVerifier){
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "normal"
-    });
-  }
-}
-
 /* SIGNUP — OTP FIRST TIME ONLY */
 
 window.sendSignupOTPForPasswordAccount = async function(){
 
-  const name = document.getElementById("signupName").value;
-  const phone = document.getElementById("signupPhone").value;
-  const role = document.getElementById("signupRole").value;
-  const password = document.getElementById("signupPassword").value;
+  try{
 
-  const clean = cleanPhone(phone);
+    const name = document.getElementById("signupName").value;
+    const phone = document.getElementById("signupPhone").value;
+    const role = document.getElementById("signupRole").value;
+    const password = document.getElementById("signupPassword").value;
 
-  if(!name || !phone || !role || !password){
-    alert("Please fill all signup details");
-    return;
-  }
+    const clean = cleanPhone(phone);
 
-  if(clean.length !== 10){
-    alert("Please enter valid 10 digit mobile number");
-    return;
-  }
+    if(!name || !phone || !role || !password){
+      alert("Please fill all signup details");
+      return;
+    }
 
-  if(password.length < 6){
-    alert("Password must be at least 6 characters");
-    return;
-  }
+    if(clean.length !== 10){
+      alert("Please enter valid 10 digit mobile number");
+      return;
+    }
 
-  const userRef = doc(db, "users", clean);
-  const userSnap = await getDoc(userRef);
+    if(password.length < 6){
+      alert("Password must be at least 6 characters");
+      return;
+    }
 
-  if(userSnap.exists()){
-    alert("Account already registered. Please login.");
-    window.location.href = "login.html";
-    return;
-  }
+    const userRef = doc(db, "users", clean);
+    const userSnap = await getDoc(userRef);
 
-  setupRecaptcha();
+    if(userSnap.exists()){
+      alert("Account already registered. Please login.");
+      window.location.href = "login.html";
+      return;
+    }
 
-  signInWithPhoneNumber(auth, formatPhoneNumber(phone), window.recaptchaVerifier)
-  .then((confirmationResult) => {
+    if(window.recaptchaVerifier){
+      window.recaptchaVerifier.clear();
+      window.recaptchaVerifier = null;
+    }
+
+    window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+      size: "normal"
+    });
+
+    await window.recaptchaVerifier.render();
+
+    const confirmationResult = await signInWithPhoneNumber(
+      auth,
+      formatPhoneNumber(phone),
+      window.recaptchaVerifier
+    );
+
     window.confirmationResult = confirmationResult;
+
     alert("OTP sent successfully");
-  })
-  .catch((error) => {
-    alert(error.message);
-  });
+
+  }catch(error){
+
+    alert("OTP Error: " + error.message);
+
+  }
 
 };
 
@@ -142,9 +152,23 @@ window.createPhonePasswordAccount = async function(){
     return;
   }
 
+  if(!window.confirmationResult){
+    alert("Please click Send OTP first.");
+    return;
+  }
+
   try{
 
     await window.confirmationResult.confirm(otp);
+
+    const userRef = doc(db, "users", clean);
+    const userSnap = await getDoc(userRef);
+
+    if(userSnap.exists()){
+      alert("Account already registered. Please login.");
+      window.location.href = "login.html";
+      return;
+    }
 
     await createUserWithEmailAndPassword(auth, email, password);
 
@@ -194,6 +218,11 @@ window.loginWithPhonePassword = async function(){
     return;
   }
 
+  if(clean.length !== 10){
+    alert("Please enter valid 10 digit mobile number");
+    return;
+  }
+
   try{
 
     const userRef = doc(db, "users", clean);
@@ -229,6 +258,8 @@ window.loginWithPhonePassword = async function(){
   }
 
 };
+
+/* FORGOT PASSWORD */
 
 window.forgotPasswordWithPhone = function(){
 
