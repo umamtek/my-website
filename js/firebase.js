@@ -217,7 +217,7 @@ window.loginWithPhonePassword = async function(){
 
   const phone = document.getElementById("loginPhone").value;
   const password = document.getElementById("loginPassword").value;
-  const role = document.getElementById("loginRole").value;
+  const role = "customer";
 
   const clean = cleanPhone(phone);
   const email = phoneToEmail(phone);
