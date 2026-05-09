@@ -346,6 +346,16 @@ window.submitBooking = async function(event){
 
   event.preventDefault();
 
+  const mapLink =
+document.getElementById("bookingMapLink").value;
+
+if(!mapLink){
+
+  alert("Please add your live location");
+
+  return;
+}
+
   const bookingData = {
 
     name: document.getElementById("bookingName").value,
@@ -361,6 +371,14 @@ window.submitBooking = async function(event){
     time: document.getElementById("bookingTime").value,
 
     details: document.getElementById("bookingDetails").value,
+    
+    pinCode: document.getElementById("bookingPin").value,
+
+    latitude: document.getElementById("bookingLatitude").value,
+
+    longitude: document.getElementById("bookingLongitude").value,
+
+    mapLink: document.getElementById("bookingMapLink").value,
 
     userPhone: localStorage.getItem("umamtekPhone") || "",
 
