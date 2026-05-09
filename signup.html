@@ -7,7 +7,7 @@
 
 <title>Signup | UMAMTEK</title>
 
-<link rel="stylesheet" href="./css/style.css?v=25">
+<link rel="stylesheet" href="./css/style.css?v=30">
 <link rel="icon" href="favicon.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -51,35 +51,27 @@ Create UMAMTEK Account
 
 <input type="tel" id="signupPhone" placeholder="Mobile Number">
 
-<input type="email" id="signupEmail" placeholder="Email Address">
-
 <select id="signupRole">
-
 <option value="">Select Account Type</option>
-
 <option value="customer">Customer</option>
-
 <option value="partner">Partner Worker</option>
-
 <option value="electrician">Electrician</option>
-
 <option value="plumber">Plumber</option>
-
 <option value="painter">Painter</option>
-
 <option value="contractor">Contractor</option>
-
 </select>
+
+<input type="password" id="signupPassword" placeholder="Create Password">
 
 <div id="recaptcha-container"></div>
 
-<button type="button" onclick="sendSignupOTP()">
+<button type="button" onclick="sendSignupOTPForPasswordAccount()">
 Send OTP
 </button>
 
 <input type="text" id="signupOtp" placeholder="Enter OTP">
 
-<button type="button" onclick="verifySignupOTP()">
+<button type="button" onclick="createPhonePasswordAccount()">
 Create Account
 </button>
 
@@ -97,15 +89,10 @@ Already have an account?
 </section>
 
 <footer class="premium-footer">
-
 <h2>UMAMTEK</h2>
-
 <p>Your Project Our Priority</p>
-
 <p>Phone: 9065760751</p>
-
 <p>Email: shaheumam802@gmail.com</p>
-
 </footer>
 
 <script src="js/script.js"></script>
