@@ -524,3 +524,139 @@ window.loadBookings = async function(){
   }
 
 };
+
+/* LOAD CUSTOMER BOOKINGS */
+
+window.loadMyBookings = async function(){
+
+  const bookingContainer =
+  document.getElementById("myBookingContainer");
+
+  if(!bookingContainer){
+    return;
+  }
+
+  const userPhone =
+  localStorage.getItem("umamtekPhone");
+
+  if(!userPhone){
+
+    bookingContainer.innerHTML = `
+    <div class="card">
+      Please login first
+    </div>
+    `;
+
+    return;
+  }
+
+  bookingContainer.innerHTML = `
+  <div class="card">
+    Loading your bookings...
+  </div>
+  `;
+
+  try{
+
+    const querySnapshot =
+    await getDocs(collection(db, "bookings"));
+
+    bookingContainer.innerHTML = "";
+
+    let found = false;
+
+    querySnapshot.forEach((docSnap) => {
+
+      const data = docSnap.data();
+
+      if(data.userPhone === userPhone){
+
+        found = true;
+
+        bookingContainer.innerHTML += `
+
+        <div class="card">
+
+          <h2 style="margin-bottom:15px;">
+          ${data.bookingId || "Booking"}
+          </h2>
+
+          <p>
+          <strong>Booked On:</strong>
+          ${data.bookingCreatedDate || ""}
+          ${data.bookingCreatedTime || ""}
+          </p>
+
+          <p>
+          <strong>Service:</strong>
+          ${data.service || ""}
+          </p>
+
+          <p>
+          <strong>Address:</strong>
+          ${data.address || ""}
+          </p>
+
+          <p>
+          <strong>PIN Code:</strong>
+          ${data.pinCode || ""}
+          </p>
+
+          <p>
+          <strong>Status:</strong>
+
+          <span style="
+          background:#f5b301;
+          color:#111;
+          padding:6px 12px;
+          border-radius:10px;
+          font-weight:700;
+          display:inline-block;
+          margin-top:6px;
+          ">
+          ${data.status || "Pending"}
+          </span>
+
+          </p>
+
+          <a
+          href="${data.mapLink || "#"}"
+          target="_blank"
+          class="primary-btn"
+          style="
+          display:inline-block;
+          margin-top:15px;
+          text-decoration:none;
+          ">
+          Open Live Location
+          </a>
+
+        </div>
+
+        `;
+
+      }
+
+    });
+
+    if(!found){
+
+      bookingContainer.innerHTML = `
+      <div class="card">
+        No bookings found 😄
+      </div>
+      `;
+
+    }
+
+  }catch(error){
+
+    bookingContainer.innerHTML = `
+    <div class="card">
+      ${error.message}
+    </div>
+    `;
+
+  }
+
+};
