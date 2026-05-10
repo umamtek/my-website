@@ -1130,3 +1130,192 @@ if(
   }
 
 };
+
+window.loadOfficialPanel = async function(){
+
+  const container = document.getElementById("officialBookingContainer");
+  const history = document.getElementById("officialHistoryContainer");
+
+  if(!container || !history) return;
+
+  container.innerHTML = `<div class="card">Loading bookings...</div>`;
+  history.innerHTML = `<div class="card">Loading history...</div>`;
+
+  try{
+
+    const querySnapshot = await getDocs(collection(db, "bookings"));
+
+    container.innerHTML = "";
+    history.innerHTML = "";
+
+    let total = 0;
+    let pending = 0;
+    let active = 0;
+    let completed = 0;
+
+    querySnapshot.forEach((docSnap) => {
+
+      const bookingDocId = docSnap.id;
+      const data = docSnap.data();
+
+      total++;
+
+      const status = data.status || "Pending";
+
+      if(status === "Pending") pending++;
+
+      if(
+        status === "Accepted" ||
+        status === "On The Way" ||
+        status === "Work Started"
+      ){
+        active++;
+      }
+
+      if(
+        status === "Completed" ||
+        status === "Cancelled" ||
+        status === "Rejected by Technician" ||
+        status === "Fake / Spam"
+      ){
+        completed++;
+      }
+
+      const whatsappPhone = cleanPhoneForWhatsApp(data.phone);
+
+      const card = `
+      <div class="card">
+
+        <h3>${data.bookingId || "Booking"}</h3>
+
+        <span class="official-badge">
+        ${status}
+        </span>
+
+        ${data.priorityBooking ? `
+        <span class="official-badge" style="background:#d60000;color:#fff;">
+        PRIORITY
+        </span>
+        ` : ""}
+
+        <p><strong>Customer:</strong> ${data.name || ""}</p>
+        <p><strong>Phone:</strong> ${data.phone || ""}</p>
+        <p><strong>Login Phone:</strong> ${data.userPhone || ""}</p>
+        <p><strong>Service:</strong> ${data.service || ""}</p>
+        <p><strong>Address:</strong> ${data.address || ""}</p>
+        <p><strong>PIN:</strong> ${data.pinCode || ""}</p>
+        <p><strong>Expected Visit:</strong> ${data.date || ""} ${data.time || ""}</p>
+        <p><strong>Details:</strong> ${data.details || ""}</p>
+
+        ${data.assignedTechnicianName ? `
+        <p><strong>Technician:</strong> ${data.assignedTechnicianName}</p>
+        <p><strong>Technician Phone:</strong> ${data.assignedTechnicianPhone || ""}</p>
+        ` : `
+        <p><strong>Technician:</strong> Not assigned</p>
+        `}
+
+        ${data.technicianETA ? `
+        <p><strong>ETA:</strong> ${data.technicianETA} mins</p>
+        ` : ""}
+
+        ${data.customerAction ? `
+        <p><strong>Customer Action:</strong> ${data.customerAction}</p>
+        ` : ""}
+
+        ${data.customerChangeRequest ? `
+        <p><strong>Change Request:</strong> ${data.customerChangeRequest}</p>
+        ` : ""}
+
+        <div class="official-actions">
+
+          <a href="tel:${data.phone || ""}" class="primary-btn">
+          Call
+          </a>
+
+          <a href="https://wa.me/${whatsappPhone}" target="_blank" class="primary-btn">
+          WhatsApp
+          </a>
+
+          <a href="${data.mapLink || "#"}" target="_blank" class="primary-btn">
+          Map
+          </a>
+
+          <button onclick="updateBookingStatus('${bookingDocId}', 'Verified')">
+          Verify
+          </button>
+
+          <button onclick="assignTechnician('${bookingDocId}')">
+          Assign
+          </button>
+
+          <button onclick="setTechnicianETA('${bookingDocId}')">
+          ETA
+          </button>
+
+          <button onclick="markPriorityBooking('${bookingDocId}')">
+          Priority
+          </button>
+
+          <button onclick="updateBookingStatus('${bookingDocId}', 'Fake / Spam')">
+          Reject Spam
+          </button>
+
+        </div>
+
+      </div>
+      `;
+
+      if(
+        status === "Completed" ||
+        status === "Cancelled" ||
+        status === "Rejected by Technician" ||
+        status === "Fake / Spam"
+      ){
+        history.innerHTML += card;
+      }else{
+        container.innerHTML += card;
+      }
+
+    });
+
+    document.getElementById("officialTotal").innerText = total;
+    document.getElementById("officialPending").innerText = pending;
+    document.getElementById("officialActive").innerText = active;
+    document.getElementById("officialCompleted").innerText = completed;
+
+    if(container.innerHTML.trim() === ""){
+      container.innerHTML = `<div class="card">No active bookings</div>`;
+    }
+
+    if(history.innerHTML.trim() === ""){
+      history.innerHTML = `<div class="card">No completed history</div>`;
+    }
+
+  }catch(error){
+
+    container.innerHTML = `<div class="card">${error.message}</div>`;
+    history.innerHTML = `<div class="card">${error.message}</div>`;
+
+  }
+
+};
+
+window.markPriorityBooking = async function(bookingDocId){
+
+  try{
+
+    await updateDoc(doc(db, "bookings", bookingDocId), {
+      priorityBooking: true,
+      priorityFee: 49,
+      priorityMarkedAt: new Date().toISOString()
+    });
+
+    alert("Booking marked as priority");
+
+    window.location.reload();
+
+  }catch(error){
+    alert(error.message);
+  }
+
+};
