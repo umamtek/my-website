@@ -188,3 +188,29 @@ window.onload = function(){
 
   updateLoginUI();
 };
+
+function toggleNotifications(){
+
+  const oldBox = document.getElementById("notificationBox");
+
+  if(oldBox){
+    oldBox.remove();
+    return;
+  }
+
+  const box = document.createElement("div");
+
+  box.id = "notificationBox";
+
+  box.innerHTML = `
+    <div class="notification-panel">
+      <h3>Notifications</h3>
+      <p>🔔 Your booking updates will appear here.</p>
+      <p>🚗 Track technician from My Bookings.</p>
+      <p>✅ Check status updates anytime.</p>
+    </div>
+  `;
+
+  document.body.appendChild(box);
+
+}
