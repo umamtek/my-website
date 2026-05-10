@@ -571,3 +571,262 @@ window.loadBookings = async function(){
   }
 
 };
+
+/* CUSTOMER MY BOOKINGS */
+
+window.loadMyBookings = async function(){
+
+  const bookingContainer = document.getElementById("myBookingContainer");
+  if(!bookingContainer) return;
+
+  const userPhone = localStorage.getItem("umamtekPhone");
+
+  if(!userPhone){
+    bookingContainer.innerHTML = `<div class="card">Please login first</div>`;
+    return;
+  }
+
+  try{
+
+    const querySnapshot = await getDocs(collection(db, "bookings"));
+    bookingContainer.innerHTML = "";
+
+    let found = false;
+
+    querySnapshot.forEach((docSnap) => {
+
+      const bookingDocId = docSnap.id;
+      const data = docSnap.data();
+
+      const canEdit =
+      data.editableUntil && new Date(data.editableUntil) > new Date();
+
+      if(data.userPhone === userPhone){
+
+        found = true;
+
+        bookingContainer.innerHTML += `
+        <div class="card">
+
+          <h2>${data.bookingId || "Booking"}</h2>
+
+          <p><strong>Booked On:</strong> ${data.bookingCreatedDate || ""} ${data.bookingCreatedTime || ""}</p>
+          <p><strong>Service:</strong> ${data.service || ""}</p>
+          <p><strong>Address:</strong> ${data.address || ""}</p>
+          <p><strong>PIN Code:</strong> ${data.pinCode || ""}</p>
+          <p><strong>Expected Visit:</strong> ${data.date || ""} ${data.time || ""}</p>
+          <p><strong>Details:</strong> ${data.details || ""}</p>
+
+          <div class="timeline">
+            <div class="timeline-step ${data.status === "Pending" ? "active" : ""}">Pending</div>
+            <div class="timeline-step ${data.status === "Accepted" ? "active" : ""}">Accepted</div>
+            <div class="timeline-step ${data.status === "On The Way" ? "active" : ""}">On The Way</div>
+            <div class="timeline-step ${data.status === "Completed" ? "active" : ""}">Completed</div>
+          </div>
+
+          <p>
+            <strong>Status:</strong>
+            <span style="background:#f5b301;color:#111;padding:6px 12px;border-radius:10px;font-weight:700;">
+              ${data.status || "Pending"}
+            </span>
+          </p>
+
+          <a href="${data.mapLink || "#"}" target="_blank" class="primary-btn" style="display:inline-block;margin-top:15px;text-decoration:none;">
+            Open Live Location
+          </a>
+
+          ${
+            data.technicianMapLink
+            ? `<a href="${data.technicianMapLink}" target="_blank" class="primary-btn" style="display:inline-block;margin-top:15px;margin-left:10px;text-decoration:none;">Track Technician 🚗</a>`
+            : `<p style="margin-top:15px;font-weight:700;">Technician tracking not started yet</p>`
+          }
+
+          ${
+            canEdit
+            ? `
+            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
+              <button onclick="requestBookingChange('${bookingDocId}')">Request Change</button>
+              <button onclick="updateCustomerAddress('${bookingDocId}')">Update Address</button>
+              <button onclick="cancelCustomerBooking('${bookingDocId}')">Cancel Booking</button>
+            </div>
+            <p style="margin-top:10px;font-size:13px;font-weight:700;color:#d60000;">
+              You can edit this booking for 180 seconds after booking.
+            </p>`
+            : `<p style="margin-top:15px;font-size:13px;font-weight:700;">Edit window closed.</p>`
+          }
+
+        </div>`;
+      }
+
+    });
+
+    if(!found){
+      bookingContainer.innerHTML = `<div class="card">No bookings found</div>`;
+    }
+
+  }catch(error){
+    bookingContainer.innerHTML = `<div class="card">${error.message}</div>`;
+  }
+
+};
+
+window.updateBookingStatus = async function(bookingDocId, newStatus){
+
+  try{
+    await updateDoc(doc(db, "bookings", bookingDocId), {
+      status: newStatus
+    });
+
+    alert("Booking status updated to " + newStatus);
+    window.location.reload();
+
+  }catch(error){
+    alert(error.message);
+  }
+
+};
+
+window.updateTechnicianLocation = async function(bookingDocId){
+
+  if(!navigator.geolocation){
+    alert("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(async function(position){
+
+    try{
+
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      await updateDoc(doc(db, "bookings", bookingDocId), {
+        technicianLatitude: lat,
+        technicianLongitude: lng,
+        technicianMapLink: `https://maps.google.com/?q=${lat},${lng}`,
+        technicianTrackingUpdatedAt: new Date().toISOString()
+      });
+
+      alert("Technician live location updated");
+
+    }catch(error){
+      alert(error.message);
+    }
+
+  }, function(){
+    alert("Location permission denied");
+  });
+
+};
+
+window.cancelCustomerBooking = async function(bookingDocId){
+
+  try{
+    await updateDoc(doc(db, "bookings", bookingDocId), {
+      status: "Cancelled",
+      customerAction: "Cancelled by customer",
+      customerActionAt: new Date().toISOString()
+    });
+
+    alert("Booking cancelled successfully");
+    window.location.reload();
+
+  }catch(error){
+    alert(error.message);
+  }
+
+};
+
+window.requestBookingChange = async function(bookingDocId){
+
+  const changeRequest = prompt("Write what you want to change in your booking");
+  if(!changeRequest) return;
+
+  try{
+    await updateDoc(doc(db, "bookings", bookingDocId), {
+      customerChangeRequest: changeRequest,
+      customerAction: "Change requested",
+      customerActionAt: new Date().toISOString()
+    });
+
+    alert("Change request submitted");
+    window.location.reload();
+
+  }catch(error){
+    alert(error.message);
+  }
+
+};
+
+window.updateCustomerAddress = async function(bookingDocId){
+
+  const newAddress = prompt("Enter your updated full address");
+  if(!newAddress) return;
+
+  const newPin = prompt("Enter updated PIN code");
+  if(!newPin) return;
+
+  try{
+    await updateDoc(doc(db, "bookings", bookingDocId), {
+      address: newAddress,
+      pinCode: newPin,
+      customerAction: "Address updated",
+      customerActionAt: new Date().toISOString()
+    });
+
+    alert("Address updated successfully");
+    window.location.reload();
+
+  }catch(error){
+    alert(error.message);
+  }
+
+};
+
+window.loadProfilePage = async function(){
+
+  const profileContainer = document.getElementById("profileContainer");
+  if(!profileContainer) return;
+
+  const userName = localStorage.getItem("umamtekUser");
+  const userPhone = localStorage.getItem("umamtekPhone");
+
+  if(!userPhone){
+    profileContainer.innerHTML = `Please login first`;
+    return;
+  }
+
+  try{
+
+    const bookingsSnapshot = await getDocs(collection(db, "bookings"));
+    let totalBookings = 0;
+
+    bookingsSnapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      if(data.userPhone === userPhone){
+        totalBookings++;
+      }
+    });
+
+    profileContainer.innerHTML = `
+      <h2>${userName || "User"}</h2>
+      <p><strong>Mobile:</strong> ${userPhone}</p>
+      <p><strong>Total Bookings:</strong> ${totalBookings}</p>
+      <button onclick="logoutUser()" class="primary-btn" style="margin-top:25px;">Logout</button>
+    `;
+
+  }catch(error){
+    profileContainer.innerHTML = error.message;
+  }
+
+};
+
+setTimeout(function(){
+  if(document.getElementById("myBookingContainer")){
+    window.loadMyBookings();
+  }
+
+  if(document.getElementById("profileContainer")){
+    window.loadProfilePage();
+  }
+}, 1200);
