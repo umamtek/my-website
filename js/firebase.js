@@ -879,3 +879,14 @@ window.updateTechnicianLocation = async function(bookingDocId){
   );
 
 };
+
+setTimeout(function(){
+
+  const myBookingContainer =
+  document.getElementById("myBookingContainer");
+
+  if(myBookingContainer && typeof window.loadMyBookings === "function"){
+    window.loadMyBookings();
+  }
+
+}, 1500);
