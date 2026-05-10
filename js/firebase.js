@@ -921,3 +921,39 @@ window.assignTechnician = async function(bookingDocId){
   }
 
 };
+
+window.setTechnicianETA = async function(bookingDocId){
+
+  const etaMinutes =
+  prompt("Enter technician arrival time in minutes");
+
+  if(!etaMinutes){
+    return;
+  }
+
+  try{
+
+    const bookingRef =
+    doc(db, "bookings", bookingDocId);
+
+    await updateDoc(bookingRef, {
+
+      technicianETA:
+      etaMinutes,
+
+      etaUpdatedAt:
+      new Date().toISOString()
+
+    });
+
+    alert("ETA updated successfully");
+
+    window.location.reload();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+};
