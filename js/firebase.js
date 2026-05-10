@@ -925,3 +925,97 @@ setTimeout(function(){
   }
 
 }, 1500);
+
+window.cancelCustomerBooking = async function(bookingDocId){
+
+  try{
+
+    const bookingRef = doc(db, "bookings", bookingDocId);
+
+    await updateDoc(bookingRef, {
+      status: "Cancelled",
+      customerAction: "Cancelled by customer",
+      customerActionAt: new Date().toISOString()
+    });
+
+    alert("Booking cancelled successfully");
+
+    window.location.reload();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+};
+
+window.requestBookingChange = async function(bookingDocId){
+
+  const changeRequest =
+  prompt("Write what you want to change in your booking");
+
+  if(!changeRequest){
+    return;
+  }
+
+  try{
+
+    const bookingRef = doc(db, "bookings", bookingDocId);
+
+    await updateDoc(bookingRef, {
+      customerChangeRequest: changeRequest,
+      customerAction: "Change requested",
+      customerActionAt: new Date().toISOString()
+    });
+
+    alert("Change request submitted");
+
+    window.location.reload();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+};
+
+window.updateCustomerAddress = async function(bookingDocId){
+
+  const newAddress =
+  prompt("Enter your updated full address");
+
+  if(!newAddress){
+    return;
+  }
+
+  const newPin =
+  prompt("Enter updated PIN code");
+
+  if(!newPin){
+    return;
+  }
+
+  try{
+
+    const bookingRef = doc(db, "bookings", bookingDocId);
+
+    await updateDoc(bookingRef, {
+      address: newAddress,
+      pinCode: newPin,
+      customerAction: "Address updated",
+      customerActionAt: new Date().toISOString()
+    });
+
+    alert("Address updated successfully");
+
+    window.location.reload();
+
+  }catch(error){
+
+    alert(error.message);
+
+  }
+
+};
