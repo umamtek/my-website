@@ -664,6 +664,31 @@ window.loadMyBookings = async function(){
           ">
           Open Live Location
           </a>
+          ${data.technicianMapLink ? `
+
+<a
+href="${data.technicianMapLink}"
+target="_blank"
+class="primary-btn"
+style="
+display:inline-block;
+margin-top:15px;
+margin-left:10px;
+text-decoration:none;
+">
+Track Technician 🚗
+</a>
+
+` : `
+
+<p style="
+margin-top:15px;
+font-weight:700;
+">
+Technician tracking not started yet
+</p>
+
+`}
 
         </div>
 
