@@ -788,3 +788,14 @@ window.loadProfilePage = async function(){
   }
 
 };
+
+setTimeout(function(){
+
+  const profileContainer =
+  document.getElementById("profileContainer");
+
+  if(profileContainer && typeof window.loadProfilePage === "function"){
+    window.loadProfilePage();
+  }
+
+}, 1500);
