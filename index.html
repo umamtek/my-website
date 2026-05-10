@@ -50,7 +50,99 @@
   ]
 }
 </script>
-  
+  <style>
+
+.hero h1{
+animation:fadeUp 1s ease forwards;
+}
+
+.hero p,
+.hero-tag,
+.hero-buttons,
+.hero-stats{
+animation:fadeUp 1.3s ease forwards;
+}
+
+.card{
+transition:0.35s ease;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 25px 60px rgba(0,0,0,0.18);
+}
+
+.primary-btn,
+.secondary-btn,
+.floating-whatsapp{
+transition:0.3s ease;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover{
+transform:translateY(-4px) scale(1.03);
+}
+
+.floating-whatsapp{
+animation:whatsappPulse 1.8s infinite;
+}
+
+@keyframes fadeUp{
+from{
+opacity:0;
+transform:translateY(35px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@keyframes whatsappPulse{
+0%{
+box-shadow:0 0 0 0 rgba(37,211,102,0.6);
+}
+70%{
+box-shadow:0 0 0 18px rgba(37,211,102,0);
+}
+100%{
+box-shadow:0 0 0 0 rgba(37,211,102,0);
+}
+}
+
+.premium-glow{
+position:absolute;
+width:300px;
+height:300px;
+background:rgba(245,179,1,0.25);
+filter:blur(80px);
+border-radius:50%;
+top:120px;
+right:50px;
+z-index:0;
+animation:glowMove 4s infinite alternate;
+}
+
+@keyframes glowMove{
+from{
+transform:translateY(0);
+}
+to{
+transform:translateY(40px);
+}
+}
+
+.hero{
+position:relative;
+overflow:hidden;
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+}
+
+</style>
 </head>
 
 <body>
