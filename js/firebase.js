@@ -993,3 +993,74 @@ window.setTechnicianETA = async function(bookingDocId){
   }
 
 };
+
+window.loadStaffBookings = async function(){
+
+  const container = document.getElementById("staffBookingContainer");
+  if(!container) return;
+
+  container.innerHTML = `<div class="card">Loading assigned jobs...</div>`;
+
+  try{
+
+    const querySnapshot = await getDocs(collection(db, "bookings"));
+
+    container.innerHTML = "";
+    let found = false;
+
+    querySnapshot.forEach((docSnap) => {
+
+      const bookingDocId = docSnap.id;
+      const data = docSnap.data();
+
+      if(data.assignedTechnicianName || data.assignedTechnicianPhone){
+
+        found = true;
+
+        container.innerHTML += `
+        <div class="card">
+
+          <h3>${data.bookingId || "Job"}</h3>
+
+          <span class="staff-badge">${data.status || "Pending"}</span>
+
+          <p><strong>Customer:</strong> ${data.name || ""}</p>
+          <p><strong>Phone:</strong> ${data.phone || ""}</p>
+          <p><strong>Service:</strong> ${data.service || ""}</p>
+          <p><strong>Address:</strong> ${data.address || ""}</p>
+          <p><strong>PIN:</strong> ${data.pinCode || ""}</p>
+          <p><strong>Visit:</strong> ${data.date || ""} ${data.time || ""}</p>
+          <p><strong>Details:</strong> ${data.details || ""}</p>
+
+          <a href="${data.mapLink || "#"}" target="_blank" class="primary-btn">
+            Navigate
+          </a>
+
+          <button onclick="updateTechnicianLocation('${bookingDocId}')">
+            Update My Location
+          </button>
+
+          <button onclick="updateBookingStatus('${bookingDocId}', 'On The Way')">
+            On The Way
+          </button>
+
+          <button onclick="updateBookingStatus('${bookingDocId}', 'Completed')">
+            Completed
+          </button>
+
+        </div>
+        `;
+
+      }
+
+    });
+
+    if(!found){
+      container.innerHTML = `<div class="card">No assigned jobs found</div>`;
+    }
+
+  }catch(error){
+    container.innerHTML = `<div class="card">${error.message}</div>`;
+  }
+
+};
