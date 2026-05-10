@@ -703,6 +703,35 @@ Completed
           ">
           Open Live Location
           </a>
+          ${canEdit ? `
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
+
+<button onclick="requestBookingChange('${bookingDocId}')">
+Request Change
+</button>
+
+<button onclick="updateCustomerAddress('${bookingDocId}')">
+Update Address
+</button>
+
+<button onclick="cancelCustomerBooking('${bookingDocId}')">
+Cancel Booking
+</button>
+
+</div>
+
+<p style="margin-top:10px;font-size:13px;font-weight:700;color:#d60000;">
+You can edit this booking for 180 seconds after booking.
+</p>
+
+` : `
+
+<p style="margin-top:15px;font-size:13px;font-weight:700;">
+Edit window closed.
+</p>
+
+`}
           ${data.technicianMapLink ? `
 
 <a
