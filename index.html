@@ -50,17 +50,61 @@
   ]
 }
 </script>
-  <style>
+<style>
+
+.hero{
+position:relative;
+overflow:hidden;
+background:linear-gradient(120deg,#050505,#111,#2b2100,#050505);
+background-size:300% 300%;
+animation:heroGradient 7s ease infinite;
+}
+
+.hero::before{
+content:"";
+position:absolute;
+inset:0;
+background:
+radial-gradient(circle at 20% 30%,rgba(245,179,1,0.35),transparent 25%),
+radial-gradient(circle at 80% 20%,rgba(255,204,34,0.25),transparent 22%),
+radial-gradient(circle at 50% 80%,rgba(245,179,1,0.22),transparent 25%);
+animation:sparkFloat 5s ease-in-out infinite alternate;
+z-index:0;
+}
+
+.hero::after{
+content:"⚡";
+position:absolute;
+right:10%;
+top:20%;
+font-size:120px;
+opacity:0.18;
+animation:boltMove 2.5s infinite alternate;
+z-index:0;
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+}
 
 .hero h1{
-animation:fadeUp 1s ease forwards;
+animation:fadeUp 1s ease forwards, textGlow 2s ease-in-out infinite alternate;
 }
 
 .hero p,
 .hero-tag,
 .hero-buttons,
 .hero-stats{
-animation:fadeUp 1.3s ease forwards;
+animation:fadeUp 1.2s ease forwards;
+}
+
+.hero-stats div{
+transition:0.35s;
+}
+
+.hero-stats div:hover{
+transform:translateY(-8px) scale(1.05);
 }
 
 .card{
@@ -69,7 +113,7 @@ transition:0.35s ease;
 
 .card:hover{
 transform:translateY(-10px);
-box-shadow:0 25px 60px rgba(0,0,0,0.18);
+box-shadow:0 25px 60px rgba(245,179,1,0.22);
 }
 
 .primary-btn,
@@ -80,11 +124,40 @@ transition:0.3s ease;
 
 .primary-btn:hover,
 .secondary-btn:hover{
-transform:translateY(-4px) scale(1.03);
+transform:translateY(-4px) scale(1.04);
 }
 
 .floating-whatsapp{
 animation:whatsappPulse 1.8s infinite;
+}
+
+.premium-glow{
+position:absolute;
+width:340px;
+height:340px;
+background:rgba(245,179,1,0.35);
+filter:blur(90px);
+border-radius:50%;
+top:120px;
+right:50px;
+z-index:0;
+animation:glowMove 4s infinite alternate;
+}
+
+@keyframes heroGradient{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+@keyframes sparkFloat{
+from{transform:translateY(0) scale(1);}
+to{transform:translateY(35px) scale(1.08);}
+}
+
+@keyframes boltMove{
+from{transform:translateY(0) rotate(-8deg);}
+to{transform:translateY(30px) rotate(8deg);}
 }
 
 @keyframes fadeUp{
@@ -98,6 +171,15 @@ transform:translateY(0);
 }
 }
 
+@keyframes textGlow{
+from{
+text-shadow:0 0 0 rgba(245,179,1,0);
+}
+to{
+text-shadow:0 0 25px rgba(245,179,1,0.45);
+}
+}
+
 @keyframes whatsappPulse{
 0%{
 box-shadow:0 0 0 0 rgba(37,211,102,0.6);
@@ -108,38 +190,6 @@ box-shadow:0 0 0 18px rgba(37,211,102,0);
 100%{
 box-shadow:0 0 0 0 rgba(37,211,102,0);
 }
-}
-
-.premium-glow{
-position:absolute;
-width:300px;
-height:300px;
-background:rgba(245,179,1,0.25);
-filter:blur(80px);
-border-radius:50%;
-top:120px;
-right:50px;
-z-index:0;
-animation:glowMove 4s infinite alternate;
-}
-
-@keyframes glowMove{
-from{
-transform:translateY(0);
-}
-to{
-transform:translateY(40px);
-}
-}
-
-.hero{
-position:relative;
-overflow:hidden;
-}
-
-.hero-content{
-position:relative;
-z-index:2;
 }
 
 </style>
