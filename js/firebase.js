@@ -536,6 +536,12 @@ window.loadBookings = async function(){
           </a>
 
           <button
+onclick="generateInvoice('${bookingDocId}')"
+style="padding:10px 16px;font-size:14px;">
+Generate Invoice
+</button>
+
+          <button
             onclick="updateTechnicianLocation('${bookingDocId}')"
             style="padding:10px 16px;font-size:14px;">
             Update My Location
