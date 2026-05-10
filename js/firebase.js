@@ -636,6 +636,16 @@ window.loadMyBookings = async function(){
           ${data.pinCode || ""}
           </p>
 
+<p>
+<strong>Expected Visit:</strong>
+${data.date || ""} ${data.time || ""}
+</p>
+
+<p>
+<strong>Details:</strong>
+${data.details || ""}
+</p>
+
           <p>
           <strong>Status:</strong>
 
