@@ -713,3 +713,78 @@ window.updateBookingStatus = async function(bookingDocId, newStatus){
   }
 
 };
+
+window.loadProfilePage = async function(){
+
+  const profileContainer =
+  document.getElementById("profileContainer");
+
+  if(!profileContainer){
+    return;
+  }
+
+  const userName =
+  localStorage.getItem("umamtekUser");
+
+  const userPhone =
+  localStorage.getItem("umamtekPhone");
+
+  if(!userPhone){
+
+    profileContainer.innerHTML = `
+    Please login first
+    `;
+
+    return;
+  }
+
+  try{
+
+    const bookingsSnapshot =
+    await getDocs(collection(db, "bookings"));
+
+    let totalBookings = 0;
+
+    bookingsSnapshot.forEach((docSnap) => {
+
+      const data = docSnap.data();
+
+      if(data.userPhone === userPhone){
+        totalBookings++;
+      }
+
+    });
+
+    profileContainer.innerHTML = `
+
+      <h2 style="margin-bottom:20px;">
+      ${userName || "User"}
+      </h2>
+
+      <p>
+      <strong>Mobile:</strong>
+      ${userPhone}
+      </p>
+
+      <p style="margin-top:15px;">
+      <strong>Total Bookings:</strong>
+      ${totalBookings}
+      </p>
+
+      <button
+      onclick="logoutUser()"
+      class="primary-btn"
+      style="margin-top:25px;">
+      Logout
+      </button>
+
+    `;
+
+  }catch(error){
+
+    profileContainer.innerHTML =
+    error.message;
+
+  }
+
+};
