@@ -450,6 +450,10 @@ window.loadBookings = async function(){
 
       const data = docSnap.data();
 
+      const bookingDocId = docSnap.id;
+const canEdit =
+data.editableUntil && new Date(data.editableUntil) > new Date();
+
       const whatsappPhone = cleanPhoneForWhatsApp(data.phone);
 
       bookingContainer.innerHTML += `
