@@ -703,6 +703,7 @@ Completed
           ">
           Open Live Location
           </a>
+          
           ${canEdit ? `
 
 <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
