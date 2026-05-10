@@ -646,8 +646,32 @@ ${data.date || ""} ${data.time || ""}
 ${data.details || ""}
 </p>
 
-          <p>
-          <strong>Status:</strong>
+          <div class="timeline">
+
+<div class="timeline-step
+${data.status === "Pending" ? "active" : ""}">
+Pending
+</div>
+
+<div class="timeline-step
+${data.status === "Accepted" ? "active" : ""}">
+Accepted
+</div>
+
+<div class="timeline-step
+${data.status === "On The Way" ? "active" : ""}">
+On The Way
+</div>
+
+<div class="timeline-step
+${data.status === "Completed" ? "active" : ""}">
+Completed
+</div>
+
+</div>
+
+<p>
+<strong>Status:</strong>
 
           <span style="
           background:#f5b301;
