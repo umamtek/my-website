@@ -1026,3 +1026,141 @@ body.dark-mode .bot-msg{
 background:#2a2a2a;
 color:#fff;
 }
+
+/* DARK LUXURY REDESIGN */
+
+body{
+background:#050505 !important;
+color:#f5f5f5;
+}
+
+body.dark-mode{
+background:#050505 !important;
+color:#f5f5f5;
+}
+
+.navbar{
+background:rgba(5,5,5,0.86) !important;
+border-bottom:1px solid rgba(245,179,1,0.25);
+box-shadow:0 15px 45px rgba(0,0,0,0.55);
+}
+
+.logo-text,
+.navbar h2{
+color:#f5b301 !important;
+letter-spacing:1px;
+}
+
+.nav-links a{
+color:#f5f5f5 !important;
+}
+
+.nav-links a:hover{
+color:#f5b301 !important;
+}
+
+.hero{
+background:
+linear-gradient(135deg,#050505,#111111,#1c1600,#050505) !important;
+color:#fff;
+}
+
+.section{
+background:transparent !important;
+}
+
+.section-title{
+color:#f5b301 !important;
+text-shadow:0 0 30px rgba(245,179,1,0.35);
+}
+
+.section-subtitle,
+.section p{
+color:#ddd;
+}
+
+.card,
+.profile-menu,
+.notification-panel,
+.ai-chat-box{
+background:rgba(15,15,15,0.88) !important;
+color:#f5f5f5 !important;
+border:1px solid rgba(245,179,1,0.25) !important;
+box-shadow:0 25px 70px rgba(0,0,0,0.60) !important;
+backdrop-filter:blur(20px);
+}
+
+.card h2,
+.card h3{
+color:#f5b301 !important;
+}
+
+.card p,
+.card strong{
+color:#f5f5f5;
+}
+
+input,
+textarea,
+select{
+background:rgba(8,8,8,0.92) !important;
+color:#fff !important;
+border:1px solid rgba(245,179,1,0.35) !important;
+}
+
+input::placeholder,
+textarea::placeholder{
+color:#aaa !important;
+}
+
+.primary-btn,
+button,
+.profile-btn,
+.notification-btn{
+background:linear-gradient(135deg,#f5b301,#ffcf33) !important;
+color:#111 !important;
+font-weight:900 !important;
+border:none !important;
+box-shadow:0 12px 35px rgba(245,179,1,0.32) !important;
+}
+
+.secondary-btn{
+background:transparent !important;
+color:#f5b301 !important;
+border:2px solid #f5b301 !important;
+}
+
+.premium-footer{
+background:#030303 !important;
+border-top:1px solid rgba(245,179,1,0.25);
+color:#ddd;
+}
+
+.floating-whatsapp{
+background:#25d366 !important;
+color:#fff !important;
+}
+
+.timeline-step{
+background:#111 !important;
+color:#aaa !important;
+border:1px solid rgba(245,179,1,0.25) !important;
+}
+
+.timeline-step.active{
+background:#f5b301 !important;
+color:#111 !important;
+box-shadow:0 0 25px rgba(245,179,1,0.55) !important;
+}
+
+.staff-badge,
+.official-badge{
+background:#f5b301 !important;
+color:#111 !important;
+}
+
+.stat-box,
+.official-stat{
+background:linear-gradient(145deg,#090909,#151515) !important;
+border:1px solid rgba(245,179,1,0.25) !important;
+}
