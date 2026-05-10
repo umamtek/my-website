@@ -33,7 +33,17 @@ if(localStorage.getItem("umamtekStaffLoggedIn") !== "true"){
 </div>
 <div class="nav-actions">
 <button class="dark-btn" onclick="toggleDarkMode()">🌙</button>
+<button onclick="staffLogout()">Logout</button>
 </div>
+
+<script>
+function staffLogout(){
+  localStorage.removeItem("umamtekStaffLoggedIn");
+  localStorage.removeItem("umamtekStaffName");
+  localStorage.removeItem("umamtekStaffPhone");
+  window.location.href = "staff-login.html";
+}
+</script>
 </nav>
 
 <section class="section">
