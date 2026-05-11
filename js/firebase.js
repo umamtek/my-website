@@ -844,8 +844,9 @@ if(
             </span>
           </p>
 
-          ${technicianBox}
-          ${etaBox}
+${technicianBox}
+${liveDistanceBox}
+${etaBox}
 
           <a href="${data.mapLink || "#"}" target="_blank" class="primary-btn" style="display:inline-block;margin-top:15px;text-decoration:none;">
           Open Live Location
