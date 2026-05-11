@@ -552,3 +552,35 @@ function showWorkPrice(){
   }
 
 }
+
+function updateBillPreview(){
+
+  const selectedWork = document.getElementById("bookingService").value;
+
+  if(!selectedWork){
+    return;
+  }
+
+  document.getElementById("billWorkName").innerText = selectedWork;
+  document.getElementById("billTravelCharge").innerText = "₹0";
+  document.getElementById("billTotal").innerText = "₹200";
+
+  document.getElementById("travelCharge").value = "0";
+  document.getElementById("totalPayable").value = "200";
+
+}
+
+function payNowComingSoon(){
+
+  alert("Pay Now will be available soon after Razorpay setup.");
+
+}
+
+function selectPayAfterWork(){
+
+  document.getElementById("paymentMode").value = "Pay After Work";
+
+  document.getElementById("paymentModeText").innerText =
+  "Selected: Pay After Work";
+
+}
