@@ -89,11 +89,42 @@ style="display:none;"
 ></textarea>
 
 <div id="pricePreview" class="card" style="display:none;margin-top:15px;">
-<h3>Price Details</h3>
-<p><strong>Real Rate:</strong> <del>₹450</del></p>
+
+<h3>Pending Payment Bill</h3>
+
+<p><strong>Selected Work:</strong> <span id="billWorkName">-</span></p>
+
+<p><strong>Real / Market Rate:</strong> <del>₹450</del></p>
+
 <p><strong>UMAMTEK Offer Rate:</strong> ₹200</p>
-<p style="font-size:14px;">Final price may vary after inspection/material requirement.</p>
+
+<p><strong>Travel Charge:</strong> <span id="billTravelCharge">₹0</span></p>
+
+<hr>
+
+<h3>Total Payable: <span id="billTotal">₹200</span></h3>
+
+<button type="button" onclick="payNowComingSoon()">
+Pay Now
+</button>
+
+<button type="button" onclick="selectPayAfterWork()">
+Pay After Work
+</button>
+
+<p id="paymentModeText" style="font-size:14px;font-weight:700;margin-top:10px;">
+Payment mode not selected
+</p>
+
+<p style="font-size:13px;">
+Note: Pay Now will start after Razorpay setup. You can choose Pay After Work for now.
+</p>
+
 </div>
+
+<input type="hidden" id="paymentMode" value="">
+<input type="hidden" id="travelCharge" value="0">
+<input type="hidden" id="totalPayable" value="200">
 
 <input type="text" id="bookingAddress" placeholder="Full Address with House No / Area / Landmark" required>
 
