@@ -593,39 +593,105 @@ Set ETA
 
 window.loadMyBookings = async function(){
 
-  const bookingContainer = document.getElementById("myBookingContainer");
-  if(!bookingContainer) return;
+  const activeBox = document.getElementById("activeBookingContainer");
+  const completedBox = document.getElementById("completedBookingContainer");
+  const cancelledBox = document.getElementById("cancelledBookingContainer");
+
+  if(!activeBox || !completedBox || !cancelledBox){
+    return;
+  }
 
   const userPhone = localStorage.getItem("umamtekPhone");
 
   if(!userPhone){
-    bookingContainer.innerHTML = `<div class="card">Please login first</div>`;
+    activeBox.innerHTML = `<div class="card">Please login first</div>`;
+    completedBox.innerHTML = "";
+    cancelledBox.innerHTML = "";
     return;
   }
+
+  activeBox.innerHTML = `<div class="card">Loading active bookings...</div>`;
+  completedBox.innerHTML = `<div class="card">Loading completed history...</div>`;
+  cancelledBox.innerHTML = `<div class="card">Loading cancelled bookings...</div>`;
 
   try{
 
     const querySnapshot = await getDocs(collection(db, "bookings"));
-    bookingContainer.innerHTML = "";
 
-    let found = false;
+    activeBox.innerHTML = "";
+    completedBox.innerHTML = "";
+    cancelledBox.innerHTML = "";
+
+    let activeFound = false;
+    let completedFound = false;
+    let cancelledFound = false;
 
     querySnapshot.forEach((docSnap) => {
 
       const bookingDocId = docSnap.id;
       const data = docSnap.data();
 
+      if(data.userPhone !== userPhone){
+        return;
+      }
+
       const canEdit =
       data.editableUntil && new Date(data.editableUntil) > new Date();
 
-      if(data.userPhone === userPhone){
+      const technicianBox = data.assignedTechnicianName ? `
+        <div style="
+        margin-top:15px;
+        padding:15px;
+        border-radius:14px;
+        background:#fff8d6;
+        border:2px solid #f5b301;
+        color:#111;
+        ">
+          <h3 style="margin-bottom:8px;color:#111;">Assigned Technician</h3>
+          <p style="color:#111;"><strong>Name:</strong> ${data.assignedTechnicianName}</p>
+          <p style="color:#111;"><strong>Phone:</strong> ${data.assignedTechnicianPhone || ""}</p>
+        </div>
+      ` : `
+        <p style="margin-top:15px;font-weight:700;">Technician not assigned yet</p>
+      `;
 
-        found = true;
+      const etaBox = data.technicianETA ? `
+        <div style="
+        margin-top:15px;
+        padding:14px 18px;
+        border-radius:14px;
+        background:#111;
+        color:#fff;
+        font-weight:800;
+        display:inline-block;
+        ">
+        🚗 Technician arriving in ${data.technicianETA} mins
+        </div>
+      ` : "";
 
-        bookingContainer.innerHTML += `
+      const actionBox = canEdit ? `
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
+          <button onclick="requestBookingChange('${bookingDocId}')">Request Change</button>
+          <button onclick="updateCustomerAddress('${bookingDocId}')">Update Address</button>
+          <button onclick="cancelCustomerBooking('${bookingDocId}')">Cancel Booking</button>
+        </div>
+        <p style="margin-top:10px;font-size:13px;font-weight:700;color:#d60000;">
+        You can edit this booking for 180 seconds after booking.
+        </p>
+      ` : `
+        <p style="margin-top:15px;font-size:13px;font-weight:700;">Edit window closed.</p>
+      `;
+
+      const reviewButton = data.status === "Completed" ? `
+        <a href="review.html" class="primary-btn" style="display:inline-block;margin-top:15px;text-decoration:none;">
+        Give Review ⭐
+        </a>
+      ` : "";
+
+      const card = `
         <div class="card">
 
-          <h2>${data.bookingId || "Booking"}</h2>
+          <h2 style="margin-bottom:15px;">${data.bookingId || "Booking"}</h2>
 
           <p><strong>Booked On:</strong> ${data.bookingCreatedDate || ""} ${data.bookingCreatedTime || ""}</p>
           <p><strong>Service:</strong> ${data.service || ""}</p>
@@ -638,78 +704,9 @@ window.loadMyBookings = async function(){
             <div class="timeline-step ${data.status === "Pending" ? "active" : ""}">Pending</div>
             <div class="timeline-step ${data.status === "Accepted" ? "active" : ""}">Accepted</div>
             <div class="timeline-step ${data.status === "On The Way" ? "active" : ""}">On The Way</div>
+            <div class="timeline-step ${data.status === "Work Started" ? "active" : ""}">Work Started</div>
             <div class="timeline-step ${data.status === "Completed" ? "active" : ""}">Completed</div>
           </div>
-
-          ${data.assignedTechnicianName ? `
-
-<div style="
-margin-top:15px;
-padding:15px;
-border-radius:14px;
-background:#fff8d6;
-border:2px solid #f5b301;
-">
-
-<h3 style="margin-bottom:10px;">
-Assigned Technician
-</h3>
-
-<p>
-<strong>Name:</strong>
-${data.assignedTechnicianName}
-</p>
-
-<p>
-<strong>Phone:</strong>
-${data.assignedTechnicianPhone || ""}
-</p>
-
-</div>
-
-` : `
-
-${data.technicianETA ? `
-
-<div style="
-margin-top:15px;
-padding:14px;
-border-radius:14px;
-background:#111;
-color:#fff;
-font-weight:700;
-display:inline-block;
-">
-
-🚗 Technician arriving in
-${data.technicianETA} mins
-
-</div>
-
-` : ``}
-
-<p style="margin-top:15px;font-weight:700;">
-Technician not assigned yet
-</p>
-
-`}
-
-${data.technicianETA ? `
-
-<div style="
-margin-top:15px;
-padding:14px 18px;
-border-radius:14px;
-background:#111;
-color:#fff;
-font-weight:800;
-display:inline-block;
-box-shadow:0 10px 25px rgba(0,0,0,0.25);
-">
-🚗 Technician arriving in ${data.technicianETA} mins
-</div>
-
-` : ``}
 
           <p>
             <strong>Status:</strong>
@@ -718,8 +715,11 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
             </span>
           </p>
 
+          ${technicianBox}
+          ${etaBox}
+
           <a href="${data.mapLink || "#"}" target="_blank" class="primary-btn" style="display:inline-block;margin-top:15px;text-decoration:none;">
-            Open Live Location
+          Open Live Location
           </a>
 
           ${
@@ -728,45 +728,43 @@ box-shadow:0 10px 25px rgba(0,0,0,0.25);
             : `<p style="margin-top:15px;font-weight:700;">Technician tracking not started yet</p>`
           }
 
-          ${
-            canEdit
-            ? `
-            <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
-              <button onclick="requestBookingChange('${bookingDocId}')">Request Change</button>
-              <button onclick="updateCustomerAddress('${bookingDocId}')">Update Address</button>
-              <button onclick="cancelCustomerBooking('${bookingDocId}')">Cancel Booking</button>
-            </div>
-            <p style="margin-top:10px;font-size:13px;font-weight:700;color:#d60000;">
-              You can edit this booking for 180 seconds after booking.
-            </p>`
-            : `<p style="margin-top:15px;font-size:13px;font-weight:700;">Edit window closed.</p>`
-          }
-${data.status === "Completed" ? `
+          ${actionBox}
+          ${reviewButton}
 
-<a
-href="review.html"
-class="primary-btn"
-style="
-display:inline-block;
-margin-top:15px;
-margin-left:10px;
-text-decoration:none;
-">
-Give Review ⭐
-</a>
+        </div>
+      `;
 
-` : ``}
-        </div>`;
+      if(data.status === "Completed"){
+        completedFound = true;
+        completedBox.innerHTML += card;
+      }else if(data.status === "Cancelled" || data.status === "Rejected by Technician"){
+        cancelledFound = true;
+        cancelledBox.innerHTML += card;
+      }else{
+        activeFound = true;
+        activeBox.innerHTML += card;
       }
 
     });
 
-    if(!found){
-      bookingContainer.innerHTML = `<div class="card">No bookings found</div>`;
+    if(!activeFound){
+      activeBox.innerHTML = `<div class="card">No active bookings</div>`;
+    }
+
+    if(!completedFound){
+      completedBox.innerHTML = `<div class="card">No completed history</div>`;
+    }
+
+    if(!cancelledFound){
+      cancelledBox.innerHTML = `<div class="card">No cancelled bookings</div>`;
     }
 
   }catch(error){
-    bookingContainer.innerHTML = `<div class="card">${error.message}</div>`;
+
+    activeBox.innerHTML = `<div class="card">${error.message}</div>`;
+    completedBox.innerHTML = "";
+    cancelledBox.innerHTML = "";
+
   }
 
 };
