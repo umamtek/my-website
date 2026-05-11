@@ -950,13 +950,15 @@ window.loadProfilePage = async function(){
 };
 
 setTimeout(function(){
-  if(document.getElementById("myBookingContainer")){
+
+  if(document.getElementById("activeBookingContainer")){
     window.loadMyBookings();
   }
 
   if(document.getElementById("profileContainer")){
     window.loadProfilePage();
   }
+
 }, 1200);
 
 window.assignTechnician = async function(bookingDocId){
