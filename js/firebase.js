@@ -340,6 +340,8 @@ window.getCustomerLocation = function(){
       `https://maps.google.com/?q=${lat},${lng}`;
 
       status.innerHTML = "✅ Live location added successfully";
+      updateTravelCharge();
+      updateBillPreview();
 
     },
 
