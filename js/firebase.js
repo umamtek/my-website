@@ -1346,6 +1346,7 @@ window.loadOfficialPanel = async function(){
         <p><strong>PIN:</strong> ${data.pinCode || ""}</p>
         <p><strong>Expected Visit:</strong> ${data.date || ""} ${data.time || ""}</p>
         <p><strong>Details:</strong> ${data.details || ""}</p>
+        ${getBillBox(data)}
 
         ${data.assignedTechnicianName ? `
         <p><strong>Technician:</strong> ${data.assignedTechnicianName}</p>
