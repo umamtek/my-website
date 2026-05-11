@@ -1556,23 +1556,58 @@ window.generateInvoice = async function(bookingDocId){
         <h3>Service Details</h3>
 
         <table>
-          <tr>
-            <th>Service</th>
-            <th>Status</th>
-            <th>Technician</th>
-            <th>Amount</th>
-          </tr>
+  <tr>
+    <th>Description</th>
+    <th>Amount</th>
+  </tr>
 
-          <tr>
-            <td>${data.service || ""}</td>
-            <td>${data.status || "Pending"}</td>
-            <td>${data.assignedTechnicianName || "Not assigned"}</td>
-            <td>₹${data.totalPayable || data.selectedPrice || 200}</td>
-          </tr>
-        </table>
+  <tr>
+    <td>Service: ${data.service || ""}</td>
+    <td>₹${data.selectedPrice || data.offerRate || 200}</td>
+  </tr>
 
-        <p class="total">Total Amount: ₹${data.totalPayable || data.selectedPrice || 200}</p>
+  <tr>
+    <td>Real / Market Rate</td>
+    <td><del>₹${data.realRate || 450}</del></td>
+  </tr>
 
+  <tr>
+    <td>UMAMTEK Offer Rate</td>
+    <td>₹${data.offerRate || 200}</td>
+  </tr>
+
+  <tr>
+    <td>Distance from UMAMTEK Base</td>
+    <td>${data.distanceKm || "0"} km approx</td>
+  </tr>
+
+  <tr>
+    <td>Travel Charge</td>
+    <td>₹${data.travelCharge || 0}</td>
+  </tr>
+
+  <tr>
+    <td>Payment Mode</td>
+    <td>${data.paymentMode || "Not Selected"}</td>
+  </tr>
+
+  <tr>
+    <td>Payment Status</td>
+    <td>${data.paymentStatus || "Unpaid"}</td>
+  </tr>
+
+  <tr>
+    <td>Status</td>
+    <td>${data.status || "Pending"}</td>
+  </tr>
+
+  <tr>
+    <td>Technician</td>
+    <td>${data.assignedTechnicianName || "Not assigned"}</td>
+  </tr>
+</table>
+
+<p class="total">Total Amount: ₹${data.totalPayable || data.selectedPrice || 200}</p>
         <p style="margin-top:30px;">
         Note: Final pricing will be updated after UMAMTEK rate card launch.
         </p>
