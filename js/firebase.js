@@ -422,7 +422,14 @@ if(!paymentMode){
     return;
   }
 
-  const bookingId = "AEA" + Math.floor(1000 + Math.random() * 9000);
+  const bookingSnapshot =
+await getDocs(collection(db, "bookings"));
+
+const nextBookingNumber =
+bookingSnapshot.size + 1;
+
+const bookingId =
+"AEA-" + String(nextBookingNumber).padStart(2, "0");
 
   const now = new Date();
 
