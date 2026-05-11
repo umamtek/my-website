@@ -1513,3 +1513,90 @@ window.submitReview = async function(event){
   }
 
 };
+
+window.addStaffMember = async function(event){
+
+  event.preventDefault();
+
+  const name = document.getElementById("staffRegName").value.trim();
+  const phone = document.getElementById("staffRegPhone").value.replace(/\D/g, "");
+  const skill = document.getElementById("staffRegSkill").value;
+  const area = document.getElementById("staffRegArea").value.trim();
+  const status = document.getElementById("staffRegStatus").value;
+
+  if(!name || !phone || !skill || !area){
+    alert("Please fill all staff details");
+    return;
+  }
+
+  if(phone.length !== 10){
+    alert("Please enter valid 10 digit mobile number");
+    return;
+  }
+
+  try{
+
+    await setDoc(doc(db, "staff", phone), {
+      name: name,
+      phone: phone,
+      skill: skill,
+      area: area,
+      status: status,
+      createdAt: new Date().toISOString()
+    });
+
+    alert("Staff added successfully");
+
+    window.location.reload();
+
+  }catch(error){
+    alert(error.message);
+  }
+
+};
+
+window.loadStaffRegistry = async function(){
+
+  const container = document.getElementById("staffRegistryContainer");
+
+  if(!container){
+    return;
+  }
+
+  container.innerHTML = `<div class="card">Loading staff...</div>`;
+
+  try{
+
+    const querySnapshot = await getDocs(collection(db, "staff"));
+
+    container.innerHTML = "";
+
+    if(querySnapshot.empty){
+      container.innerHTML = `<div class="card">No staff registered yet</div>`;
+      return;
+    }
+
+    querySnapshot.forEach((docSnap) => {
+
+      const data = docSnap.data();
+
+      container.innerHTML += `
+      <div class="card">
+
+        <h3>${data.name || ""}</h3>
+
+        <p><strong>Phone:</strong> ${data.phone || ""}</p>
+        <p><strong>Skill:</strong> ${data.skill || ""}</p>
+        <p><strong>Area:</strong> ${data.area || ""}</p>
+        <p><strong>Status:</strong> ${data.status || ""}</p>
+
+      </div>
+      `;
+
+    });
+
+  }catch(error){
+    container.innerHTML = `<div class="card">${error.message}</div>`;
+  }
+
+};
