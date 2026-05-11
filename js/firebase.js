@@ -763,6 +763,18 @@ if(
       Estimated Arrival: <strong>${liveInfo.etaMinutes} mins</strong>
       </p>
 
+      <a
+href="https://www.google.com/maps/dir/${data.technicianLatitude},${data.technicianLongitude}/${data.latitude},${data.longitude}"
+target="_blank"
+class="primary-btn"
+style="
+display:inline-block;
+margin-top:12px;
+text-decoration:none;
+">
+Open Live Route Map 🗺️
+</a>
+
       <p style="color:#ccc;font-size:13px;">
       ETA is estimated based on live location. Road traffic ETA will be added later.
       </p>
