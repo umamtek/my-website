@@ -649,3 +649,25 @@ function updateTravelCharge(){
   }
 
 }
+
+function calculateTechnicianDistanceETA(customerLat, customerLng, technicianLat, technicianLng){
+
+  const distance =
+  calculateDistanceKm(
+    Number(customerLat),
+    Number(customerLng),
+    Number(technicianLat),
+    Number(technicianLng)
+  );
+
+  const distanceKm = distance.toFixed(2);
+
+  // Average city speed approx 20 km/h
+  const etaMinutes = Math.ceil((distance / 20) * 60);
+
+  return {
+    distanceKm: distanceKm,
+    etaMinutes: etaMinutes
+  };
+
+}
