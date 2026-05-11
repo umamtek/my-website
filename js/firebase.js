@@ -704,17 +704,7 @@ window.loadMyBookings = async function(){
         Give Review ⭐
         </a>
       ` : "";
-const invoiceButton =
-(data.status === "Completed" && data.paymentStatus === "Paid") ? `
-  <button onclick="generateInvoice('${bookingDocId}')" style="margin-top:15px;">
-  Download Invoice
-  </button>
-` : `
-  <p style="margin-top:15px;font-weight:700;">
-  Invoice will be available after service completion and payment confirmation.
-  </p>
-`;
-      
+
       const invoiceButton =
 (data.status === "Completed" && data.paymentStatus === "Paid") ? `
   <button onclick="generateInvoice('${bookingDocId}')" style="margin-top:15px;">
