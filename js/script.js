@@ -584,3 +584,68 @@ function selectPayAfterWork(){
   "Selected: Pay After Work";
 
 }
+
+const UMAMTEK_BASE_LAT = 25.239370;
+const UMAMTEK_BASE_LNG = 86.972966;
+
+function calculateDistanceKm(lat1, lng1, lat2, lng2){
+
+  const R = 6371;
+
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+
+  const a =
+  Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+  Math.cos(lat1 * Math.PI / 180) *
+  Math.cos(lat2 * Math.PI / 180) *
+  Math.sin(dLng / 2) *
+  Math.sin(dLng / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+
+}
+
+function updateTravelCharge(){
+
+  const lat = parseFloat(document.getElementById("bookingLatitude")?.value);
+  const lng = parseFloat(document.getElementById("bookingLongitude")?.value);
+
+  if(!lat || !lng){
+    return;
+  }
+
+  const distance =
+  calculateDistanceKm(UMAMTEK_BASE_LAT, UMAMTEK_BASE_LNG, lat, lng);
+
+  const roundedDistance =
+  Math.ceil(distance);
+
+  let travelCharge = 0;
+
+  if(distance > 2){
+    travelCharge = Math.ceil(distance - 2) * 50;
+  }
+
+  const total = 200 + travelCharge;
+
+  document.getElementById("billTravelCharge").innerText =
+  `₹${travelCharge} (${roundedDistance} km approx)`;
+
+  document.getElementById("billTotal").innerText =
+  `₹${total}`;
+
+  document.getElementById("travelCharge").value =
+  travelCharge;
+
+  document.getElementById("totalPayable").value =
+  total;
+
+  if(document.getElementById("distanceKm")){
+    document.getElementById("distanceKm").value =
+    distance.toFixed(2);
+  }
+
+}
