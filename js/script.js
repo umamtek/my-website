@@ -202,6 +202,19 @@ function toggleNotifications(){
 
   box.id = "notificationBox";
 
+  function toggleNotifications(){
+
+  const oldBox = document.getElementById("notificationBox");
+
+  if(oldBox){
+    oldBox.remove();
+    return;
+  }
+
+  const box = document.createElement("div");
+
+  box.id = "notificationBox";
+
   box.innerHTML = `
     <div class="notification-panel">
       <h3>Notifications</h3>
@@ -210,6 +223,10 @@ function toggleNotifications(){
       <p>✅ Check status updates anytime.</p>
     </div>
   `;
+
+  document.body.appendChild(box);
+
+}
 
   document.body.appendChild(box);
 
