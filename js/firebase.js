@@ -723,7 +723,55 @@ window.loadMyBookings = async function(){
       ` : `
         <p style="margin-top:15px;font-weight:700;">Technician not assigned yet</p>
       `;
+      let liveDistanceBox = "";
 
+if(
+  data.latitude &&
+  data.longitude &&
+  data.technicianLatitude &&
+  data.technicianLongitude
+){
+
+  const liveInfo =
+  calculateTechnicianDistanceETA(
+    data.latitude,
+    data.longitude,
+    data.technicianLatitude,
+    data.technicianLongitude
+  );
+
+  liveDistanceBox = `
+    <div style="
+    margin-top:15px;
+    padding:16px;
+    border-radius:16px;
+    background:#111;
+    color:#fff;
+    border:2px solid #f5b301;
+    box-shadow:0 15px 35px rgba(0,0,0,0.25);
+    ">
+
+      <h3 style="color:#f5b301;margin-bottom:10px;">
+      🚗 Technician Live Tracking
+      </h3>
+
+      <p style="color:#fff;">
+      Technician is approx <strong>${liveInfo.distanceKm} km</strong> away from your location.
+      </p>
+
+      <p style="color:#fff;">
+      Estimated Arrival: <strong>${liveInfo.etaMinutes} mins</strong>
+      </p>
+
+      <p style="color:#ccc;font-size:13px;">
+      ETA is estimated based on live location. Road traffic ETA will be added later.
+      </p>
+
+    </div>
+  `;
+
+}
+      
       const etaBox = data.technicianETA ? `
         <div style="
         margin-top:15px;
