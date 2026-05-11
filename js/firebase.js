@@ -71,6 +71,47 @@ function cleanPhoneForWhatsApp(phone){
   return clean;
 }
 
+function getBillBox(data){
+
+  return `
+    <div style="
+    margin-top:15px;
+    padding:15px;
+    border-radius:14px;
+    background:#fff8d6;
+    border:2px solid #f5b301;
+    color:#111;
+    ">
+
+      <h3 style="color:#111;margin-bottom:10px;">
+      Bill Details
+      </h3>
+
+      <p style="color:#111;"><strong>Real Rate:</strong> <del>₹${data.realRate || 450}</del></p>
+
+      <p style="color:#111;"><strong>UMAMTEK Offer:</strong> ₹${data.offerRate || data.selectedPrice || 200}</p>
+
+      <p style="color:#111;"><strong>Distance:</strong> ${data.distanceKm || "0"} km approx</p>
+
+      <p style="color:#111;"><strong>Travel Charge:</strong> ₹${data.travelCharge || 0}</p>
+
+      <p style="
+      color:#111;
+      font-size:18px;
+      font-weight:900;
+      ">
+      Total Payable: ₹${data.totalPayable || data.selectedPrice || 200}
+      </p>
+
+      <p style="color:#111;"><strong>Payment Mode:</strong> ${data.paymentMode || "Not Selected"}</p>
+
+      <p style="color:#111;"><strong>Payment Status:</strong> ${data.paymentStatus || "Unpaid"}</p>
+
+    </div>
+  `;
+
+}
+
 /* SIGNUP OTP */
 
 window.sendSignupOTPForPasswordAccount = async function(){
